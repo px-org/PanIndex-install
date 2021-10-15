@@ -142,7 +142,7 @@ get_version(){
             -s "${TAG_URL}" --connect-timeout 20 | awk -F'[ "]+' '$0~"tag_name"{print $4;exit}' )")"
 
         [ ! -f /usr/local/bin/PanIndex ] && return 2
-        VER="$(/usr/local/bin/PanIndex -cq=version | awk '/Version/{print $NF;exit}')"
+        VER="$(/usr/local/bin/PanIndex -cq=version)"
         RETVAL=$?
         CURRENT_VERSION="$(normalizeVersion "$VER")"
 
