@@ -291,7 +291,7 @@ install_pan_index(){
   "dsn": "${WORKING_DIRECTORY}/data/data.db"
 }
 EOF
-		mv "${WORKING_DIRECTORY}/PanIndex*" /usr/local/bin/PanIndex
+		mv "${WORKING_DIRECTORY}/PanIndex-linux-${VDIS}" /usr/local/bin/PanIndex
 		chmod +x '/usr/local/bin/PanIndex'
 		CEcho ${BLUE} "info: Move PanIndex to /usr/local/bin."
 		return 1
