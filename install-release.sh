@@ -51,6 +51,8 @@ TAR_CMD=$(command -v tar 2>/dev/null)
 
 PROXY=""
 
+CHANNEL="/latest"
+
 YES="0"
 
 CONFIRM_MSG=""
@@ -62,20 +64,21 @@ CEcho(){
 
 show_help(){
   cat - 1>& 2 << EOF
-./install-release.sh [-h] [-i] [-r] [-c] [-p] [-a]
+./install-release.sh [-h] [-i] [-r] [-c] [-p] [-a] [-pre]
   -h, --help            Show help.
   -i, --install         Install or update.
   -r, --remove          Remove installed PanIndex.
   -c, --check           Check for update.
   -p, --proxy           To download through a proxy server, use -p socks5://127.0.0.1:1080 or -p http://127.0.0.1:3128 etc.
   -a, --auto            Auto install or update without confirm.
+  -pre                  Change channel to pre-release.
 EOF
 }
 
 download_PanIndex(){
   mkdir -p "$WORKING_DIRECTORY"
 	local TARGET_FILE="${WORKING_DIRECTORY}/PanIndex.tar.gz"
-    DOWNLOAD_LINK="https://github.com/libsgh/PanIndex/releases/download/${RELEASE_LATEST_VERSION}/PanIndex-${RELEASE_LATEST_VERSION}-linux-${VDIS}.tar.gz"
+    DOWNLOAD_LINK="https://github.com/libsgh/PanIndex/releases/download/${RELEASE_LATEST_VERSION}/PanIndex-linux-${VDIS}.tar.gz"
     CEcho ${BLUE} "info: Downloading PanIndex: ${DOWNLOAD_LINK}"
     curl ${PROXY} -L -H "Cache-Control: no-cache" -o "${TARGET_FILE}" ${DOWNLOAD_LINK}
     if [ $? != 0 ];then
@@ -135,14 +138,14 @@ get_version(){
         return 4
     else
         #get the latest release
-        TAG_URL="https://api.github.com/repos/libsgh/PanIndex/releases/latest"
+        TAG_URL="https://api.github.com/repos/libsgh/PanIndex/releases${CHANNEL}"
         RELEASE_LATEST_VERSION="$(normalizeVersion "$(curl ${PROXY} \
             -H "Accept: application/json" \
             -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0" \
             -s "${TAG_URL}" --connect-timeout 20 | awk -F'[ "]+' '$0~"tag_name"{print $4;exit}' )")"
 
         [ ! -f /usr/local/bin/PanIndex ] && return 2
-        VER="$(/usr/local/bin/PanIndex -cq=version)"
+        VER="$(/usr/local/bin/PanIndex -config_query=version)"
         RETVAL=$?
         CURRENT_VERSION="$(normalizeVersion "$VER")"
 
@@ -181,6 +184,10 @@ judgment_parameters() {
     case "$1" in
         -p|--proxy)
         PROXY="-x ${2}"
+        shift
+        ;;
+        -pre)
+        CHANNEL=""
         shift
         ;;
         -a|--auto)
@@ -269,9 +276,22 @@ install_pan_index(){
 	if [[ $RETVAL -eq 0 ]] ; then
 		CEcho ${BLUE} "info: Extracting PanIndex package to ${WORKING_DIRECTORY}."
 		mkdir -p "${WORKING_DIRECTORY}"
-		tar -zxf "${WORKING_DIRECTORY}/PanIndex.tar.gz" -C ${WORKING_DIRECTORY}
+		tar --no-same-owner -zxf "${WORKING_DIRECTORY}/PanIndex.tar.gz" -C ${WORKING_DIRECTORY}
 		rm -rf "${WORKING_DIRECTORY}/README.md" "${WORKING_DIRECTORY}/LICENSE" "${WORKING_DIRECTORY}/PanIndex.tar.gz"
-		mv "${WORKING_DIRECTORY}/PanIndex" /usr/local/bin/PanIndex
+		cat > "${WORKING_DIRECTORY}/config.json" << EOF
+{
+  "host": "0.0.0.0",
+  "port": 5238,
+  "log_level": "info",
+  "data_path": "${WORKING_DIRECTORY}/data",
+  "cert_file": "",
+  "key_file": "",
+  "config_query": "",
+  "db_type": "sqlite",
+  "dsn": "${WORKING_DIRECTORY}/data/data.db"
+}
+EOF
+		mv "${WORKING_DIRECTORY}/PanIndex*" /usr/local/bin/PanIndex
 		chmod +x '/usr/local/bin/PanIndex'
 		CEcho ${BLUE} "info: Move PanIndex to /usr/local/bin."
 		return 1
@@ -290,8 +310,7 @@ After=network.target
 [Service]
 User=root
 WorkingDirectory=${WORKING_DIRECTORY}
-ExecStart=/usr/local/bin/PanIndex
-Environment="PAN_INDEX_DATA_PATH=${WORKING_DIRECTORY}"
+ExecStart=/usr/local/bin/PanIndex -c=${WORKING_DIRECTORY}/config.json
 Restart=on-failure
 RestartPreventExitStatus=23
 LimitNPROC=10000
