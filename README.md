@@ -10,9 +10,10 @@ installed executable file: /usr/local/bin/PanIndex
 installed working directory(data): /usr/local/etc/PanIndex
 ```
 
-### Install or Update
+### Install or Update (from release or pre release, default release)
 ```
 # bash <(curl -L https://github.com/libsgh/PanIndex-install/raw/main/install-release.sh) -i
+# bash <(curl -L https://github.com/libsgh/PanIndex-install/raw/main/install-release.sh) -i -pre
 ```
 
 ### Help
@@ -35,9 +36,14 @@ installed working directory(data): /usr/local/etc/PanIndex
 # bash <(curl -L https://github.com/libsgh/PanIndex-install/raw/main/install-release.sh) -a
 ```
 
+### Install Pre-release
+```
+# bash <(curl -L https://github.com/libsgh/PanIndex-install/raw/main/install-release.sh) -a -pre
+```
+
 ### Install with proxy
 ```
-# bash <(curl -L https://github.com/libsgh/PanIndex-install/raw/main/install-release.sh) --i -p=socks5://127.0.0.1:1089
+# bash <(curl -L https://github.com/libsgh/PanIndex-install/raw/main/install-release.sh) -i -p=socks5://127.0.0.1:1089
 ```
 
 ### Change working directory
