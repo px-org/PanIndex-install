@@ -12,38 +12,38 @@ installed working directory(data): /usr/local/etc/PanIndex
 
 ### Install or Update (from release or pre release, default release)
 ```
-# bash <(curl -L https://github.com/libsgh/PanIndex-install/raw/main/install-release.sh) -i
-# bash <(curl -L https://github.com/libsgh/PanIndex-install/raw/main/install-release.sh) -i -pre
+# bash <(curl -L https://github.com/px-org/PanIndex-install/raw/main/install-release.sh) -i
+# bash <(curl -L https://github.com/px-org/PanIndex-install/raw/main/install-release.sh) -i -pre
 ```
 
 ### Help
 ```
-# bash <(curl -L https://github.com/libsgh/PanIndex-install/raw/main/install-release.sh) -h
+# bash <(curl -L https://github.com/px-org/PanIndex-install/raw/main/install-release.sh) -h
 ```
 
 ### Check for update
 ```
-# bash <(curl -L https://github.com/libsgh/PanIndex-install/raw/main/install-release.sh) -c
+# bash <(curl -L https://github.com/px-org/PanIndex-install/raw/main/install-release.sh) -c
 ```
 
 ### Remove PanIndex
 ```
-# bash <(curl -L https://github.com/libsgh/PanIndex-install/raw/main/install-release.sh) -r
+# bash <(curl -L https://github.com/px-org/PanIndex-install/raw/main/install-release.sh) -r
 ```
 
 ### Install without confirm
 ```
-# bash <(curl -L https://github.com/libsgh/PanIndex-install/raw/main/install-release.sh) -a
+# bash <(curl -L https://github.com/px-org/PanIndex-install/raw/main/install-release.sh) -a
 ```
 
 ### Install Pre-release
 ```
-# bash <(curl -L https://github.com/libsgh/PanIndex-install/raw/main/install-release.sh) -a -pre
+# bash <(curl -L https://github.com/px-org/PanIndex-install/raw/main/install-release.sh) -a -pre
 ```
 
 ### Install with proxy
 ```
-# bash <(curl -L https://github.com/libsgh/PanIndex-install/raw/main/install-release.sh) -i -p=socks5://127.0.0.1:1089
+# bash <(curl -L https://github.com/px-org/PanIndex-install/raw/main/install-release.sh) -i -p=socks5://127.0.0.1:1089
 ```
 
 ### Change working directory

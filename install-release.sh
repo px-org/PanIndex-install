@@ -4,10 +4,10 @@
 # https://wiki.linuxfoundation.org/lsb/fhs
 
 # The URL of the script project is:
-# https://github.com/libsgh/PanIndex-install
+# https://github.com/px-org/PanIndex-install
 
 # The URL of the script is:
-# https://raw.githubusercontent.com/libsgh/PanIndex-install/main/install.sh
+# https://raw.githubusercontent.com/px-org/PanIndex-install/main/install.sh
 
 # export WORKING_DIRECTORY='/usr/local/etc/PanIndex'
 WORKING_DIRECTORY=${WORKING_DIRECTORY:-/usr/local/etc/PanIndex}
@@ -78,7 +78,7 @@ EOF
 download_PanIndex(){
   mkdir -p "$WORKING_DIRECTORY"
 	local TARGET_FILE="${WORKING_DIRECTORY}/PanIndex.tar.gz"
-    DOWNLOAD_LINK="https://github.com/libsgh/PanIndex/releases/download/${RELEASE_LATEST_VERSION}/PanIndex-linux-${VDIS}.tar.gz"
+    DOWNLOAD_LINK="https://github.com/px-org/PanIndex/releases/download/${RELEASE_LATEST_VERSION}/PanIndex-linux-${VDIS}.tar.gz"
     CEcho ${BLUE} "info: Downloading PanIndex: ${DOWNLOAD_LINK}"
     curl ${PROXY} -L -H "Cache-Control: no-cache" -o "${TARGET_FILE}" ${DOWNLOAD_LINK}
     if [ $? != 0 ];then
@@ -138,7 +138,7 @@ get_version(){
         return 4
     else
         #get the latest release
-        TAG_URL="https://api.github.com/repos/libsgh/PanIndex/releases${CHANNEL}"
+        TAG_URL="https://api.github.com/repos/px-org/PanIndex/releases${CHANNEL}"
         RELEASE_LATEST_VERSION="$(normalizeVersion "$(curl ${PROXY} \
             -H "Accept: application/json" \
             -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0" \
@@ -304,7 +304,7 @@ install_pan_index_service(){
 		cat > /etc/systemd/system/PanIndex.service << EOF
 [Unit]
 Description=PanIndex Service
-Documentation=https://libsgh.github.io/PanIndex/
+Documentation=https://pan-index.pages.dev
 After=network.target
 
 [Service]
